@@ -1,3 +1,57 @@
+<?php
+
+    // データベース接続
+    $dsn = 'mysql:dbname=myfriends;host=localhost';
+    $user = 'root';
+    $password = '';
+    $dbh = new PDO($dsn, $user, $password);
+    $dbh->query('SET NAMES utf8');
+
+    // 都道府県名の取得
+    // SQL作成
+    $sql = 'SELECT * FROM `areas`';
+    // SQL実行
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    // データ取得
+    $areas = array();
+    while (1) {
+      $rec = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($rec == false) {
+        break;
+      }
+      $areas[] = $rec;
+    }
+
+    // 友達情報の取得
+    // パラメータを受け取る
+    $friend_id = $_GET['friend_id'];
+    // SQL作成
+    $sql = 'SELECT * FROM `friends` WHERE `friend_id` = ' . $friend_id;
+    // SQL実行
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    // データ取得
+    $friends = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // 友達情報の更新
+    // SQL作成
+    if (isset($_POST) && !empty($_POST)) {
+    $sql = 'UPDATE `friends`
+            SET `friend_name` ="'.$_POST['name'].'",`area_id`='.$_POST['area_id'].',`gender`='.$_POST['gender'].',`age`='.$_POST['age'].' WHERE `friend_id` = '.$friend_id;
+    // SQL実行
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+
+    header('Location: index.php');
+
+    }
+
+    // データベース切断
+    $dbh = null;
+
+ ?>
+
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -53,7 +107,7 @@
             <div class="form-group">
               <label class="col-sm-2 control-label">名前</label>
               <div class="col-sm-10">
-                <input type="text" name="name" class="form-control" placeholder="山田　太郎" value="山田　太郎">
+                <input type="text" name="name" class="form-control" value="<?php echo $friends['friend_name']; ?>">
               </div>
             </div>
             <!-- 出身 -->
@@ -61,12 +115,13 @@
               <label class="col-sm-2 control-label">出身</label>
               <div class="col-sm-10">
                 <select class="form-control" name="area_id">
-                  <option value="0">出身地を選択</option>
-                  <option value="1" selected>北海道</option>
-                  <option value="2">青森</option>
-                  <option value="3">岩手</option>
-                  <option value="4">宮城</option>
-                  <option value="5">秋田</option>
+                  <?php foreach ($areas as $area): ?>
+                    <?php if($area['area_id'] == $friends['area_id']){ ?>
+                    <option value="<?php echo $area['area_id']; ?>" selected><?php echo $area['area_name']; ?></option>
+                    <?php }else{ ?>
+                    <option value="<?php echo $area['area_id']; ?>" ><?php echo $area['area_name']; ?></option>
+                    <?php } ?>
+                  <?php endforeach; ?>
                 </select>
               </div>
             </div>
@@ -75,9 +130,13 @@
               <label class="col-sm-2 control-label">性別</label>
               <div class="col-sm-10">
                 <select class="form-control" name="gender">
-                  <option value="0">性別を選択</option>
-                  <option value="1" selected>男性</option>
-                  <option value="2">女性</option>
+                  <?php if ($friends['gender'] == '0'){ ?>
+                    <option value="0" selected>男性</option>
+                    <option value="1">女性</option>
+                  <?php }else{ ?>
+                  <option value="0" >男性</option>
+                  <option value="1" selected>女性</option>
+                  <?php } ?>
                 </select>
               </div>
             </div>
@@ -85,10 +144,9 @@
             <div class="form-group">
               <label class="col-sm-2 control-label">年齢</label>
               <div class="col-sm-10">
-                <input type="text" name="age" class="form-control" placeholder="例：27" value="27">
+                <input type="text" name="age" class="form-control" value="<?php echo $friends['age']; ?>">
               </div>
             </div>
-
           <input type="submit" class="btn btn-default" value="更新">
         </form>
       </div>

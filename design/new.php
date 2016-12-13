@@ -1,3 +1,46 @@
+<?php
+    // データベース接続
+    $dsn = 'mysql:dbname=myfriends;host=localhost';
+    $user = 'root';
+    $password = '';
+    $dbh = new PDO($dsn, $user, $password);
+    $dbh->query('SET NAMES utf8');
+
+    // 都道府県名の表示
+    // SQL作成
+    $sql = 'SELECT * FROM `areas`';
+    // SQL実行
+    $stmt = $dbh->prepare($sql);
+    $stmt->execute();
+    // データ取得
+    $areas = array(); // データ格納用の空配列を用意
+    while (1) {
+      $rec = $stmt->fetch(PDO::FETCH_ASSOC);
+      if ($rec == false) {
+        break;
+      }
+      $areas[] = $rec; // 1レコードずつデータを格納
+    }
+
+    // 新規データの登録
+    // SQL作成
+    if (isset($_POST) && !empty($_POST)) {
+
+      $sql = 'INSERT INTO `friends` (`friend_name`, `area_id`, `gender`, `age`, `created`)
+              VALUES ("' . $_POST['name'] . '", ' . $_POST['area_id'] . ', ' . $_POST['gender'] . ', ' . $_POST['age'] . ', NOW())';
+    // SQL実行
+      $stmt = $dbh->prepare($sql);
+      $stmt->execute();
+
+      header('Location: index.php');
+
+    }
+
+    // データベース切断
+    $dbh = null;
+
+ ?>
+
 <!DOCTYPE html>
 <html lang="ja">
   <head>
@@ -49,6 +92,7 @@
       <div class="col-md-4 content-margin-top">
         <legend>友達の登録</legend>
         <form method="post" action="" class="form-horizontal" role="form">
+          <!-- actionは空欄→new.phpでデータを受け取って登録処理し、index.phpに遷移 -->
             <!-- 名前 -->
             <div class="form-group">
               <label class="col-sm-2 control-label">名前</label>
@@ -62,11 +106,9 @@
               <div class="col-sm-10">
                 <select class="form-control" name="area_id">
                   <option value="0">出身地を選択</option>
-                  <option value="1">北海道</option>
-                  <option value="2">青森</option>
-                  <option value="3">岩手</option>
-                  <option value="4">宮城</option>
-                  <option value="5">秋田</option>
+                  <?php foreach ($areas as $area): ?>
+                    <option value="<?php echo $area['area_id']; ?>"><?php echo $area['area_name']; ?></option>
+                  <?php endforeach; ?>
                 </select>
               </div>
             </div>
@@ -75,9 +117,9 @@
               <label class="col-sm-2 control-label">性別</label>
               <div class="col-sm-10">
                 <select class="form-control" name="gender">
-                  <option value="0">性別を選択</option>
-                  <option value="1">男性</option>
-                  <option value="2">女性</option>
+                  <option value="-1">性別を選択</option>
+                  <option value="0">男性</option>
+                  <option value="1">女性</option>
                 </select>
               </div>
             </div>
@@ -88,7 +130,6 @@
                 <input type="text" name="age" class="form-control" placeholder="例：27">
               </div>
             </div>
-
           <input type="submit" class="btn btn-default" value="登録">
         </form>
       </div>
