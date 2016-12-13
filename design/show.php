@@ -6,6 +6,21 @@
     $dbh = new PDO($dsn, $user, $password);
     $dbh->query('SET NAMES utf8');
 
+    // 友達データの削除
+      //$_GET['action'] が存在する、かつ空でないとき、deleteが指定されていたら削除処理を行う
+      //削除処理を行ったら、index.phpに画面遷移する
+    if (isset($_GET['action']) && !empty($_GET['action'])) {
+      if ($_GET['action'] == 'delete') {
+        // SQL作成
+        $sql = 'DELETE from `friends` WHERE `friend_id` = ' . $_GET['friend_id'];
+        // SQL実行
+        $stmt = $dbh->prepare($sql);
+        $stmt->execute();
+        // index.phpに画面遷移
+        header('location: index.php');
+      }
+    }
+
     // 都道府県別の友達情報の取得
 
     // 1.都道府県名の取得
@@ -46,7 +61,6 @@
       }
 
     }
-
 
     // データベース切断
     $dbh = null;
