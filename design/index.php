@@ -6,15 +6,17 @@
     $dbh = new PDO($dsn, $user, $password);
     $dbh->query('SET NAMES utf8');
 
+    // 都道府県の一覧を表示
     // SQL作成
-    $sql = 'SELECT * FROM `areas`';
+    // $sql = 'SELECT * FROM `areas`';
       // SELECT カラム名 FROM テーブル名 WHERE 条件
       // カラム名の部分に＊を使用すると、全カラムを意味する
-
+    $sql = 'SELECT `areas`.`area_id`, `areas`.`area_name`, COUNT(`friends`.`friend_id`) AS friends_cnt
+            FROM `areas` LEFT JOIN `friends` ON `areas`.`area_id` = `friends`.`area_id`
+            GROUP BY `areas`.`area_id`, `areas`.`area_name` ORDER BY `areas`.`area_id`';
     // SQL実行
     $stmt = $dbh->prepare($sql);
     $stmt->execute();
-
     // データ取得
     $areas = array(); // データ格納用の空配列を用意
     while (1) {
@@ -97,7 +99,7 @@
               <td><div class="text-center"><a href="show.php?area_id=<?php echo $area['area_id']; ?>">
                 <?php echo $area['area_name']; ?>
               </a></div></td>
-              <td><div class="text-center"></div></td>
+              <td><div class="text-center"><?php echo $area['friends_cnt']; ?></div></td>
             </tr>
             <?php endforeach; ?>
           </tbody>
