@@ -1,0 +1,158 @@
+-- phpMyAdmin SQL Dump
+-- version 4.4.14
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: 2016 年 12 月 13 日 08:28
+-- サーバのバージョン： 5.6.26
+-- PHP Version: 5.5.28
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+
+--
+-- Database: `myfriends`
+--
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `areas`
+--
+
+CREATE TABLE IF NOT EXISTS `areas` (
+  `area_id` int(11) NOT NULL,
+  `area_name` varchar(10) NOT NULL
+) ENGINE=InnoDB AUTO_INCREMENT=95 DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `areas`
+--
+
+INSERT INTO `areas` (`area_id`, `area_name`) VALUES
+(1, '北海道'),
+(2, '青森県'),
+(3, '岩手県'),
+(4, '宮城県'),
+(5, '秋田県'),
+(6, '山形県'),
+(7, '福島県'),
+(8, '茨城県'),
+(9, '栃木県'),
+(10, '群馬県'),
+(11, '埼玉県'),
+(12, '千葉県'),
+(13, '東京都'),
+(14, '神奈川県'),
+(15, '新潟県'),
+(16, '富山県'),
+(17, '石川県'),
+(18, '福井県'),
+(19, '山梨県'),
+(20, '長野県'),
+(21, '岐阜県'),
+(22, '静岡県'),
+(23, '愛知県'),
+(24, '三重県'),
+(25, '滋賀県'),
+(26, '京都府'),
+(27, '大阪府'),
+(28, '兵庫県'),
+(29, '奈良県'),
+(30, '和歌山県'),
+(31, '鳥取県'),
+(32, '島根県'),
+(33, '岡山県'),
+(34, '広島県'),
+(35, '山口県'),
+(36, '徳島県'),
+(37, '香川県'),
+(38, '愛媛県'),
+(39, '高知県'),
+(40, '福岡県'),
+(41, '佐賀県'),
+(42, '長崎県'),
+(43, '熊本県'),
+(44, '大分県'),
+(45, '宮崎県'),
+(46, '鹿児島県'),
+(47, '沖縄県');
+
+-- --------------------------------------------------------
+
+--
+-- テーブルの構造 `friends`
+--
+
+CREATE TABLE IF NOT EXISTS `friends` (
+  `friend_id` int(11) NOT NULL,
+  `friend_name` varchar(20) NOT NULL,
+  `area_id` int(11) NOT NULL,
+  `gender` int(11) NOT NULL,
+  `age` int(11) NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+
+--
+-- テーブルのデータのダンプ `friends`
+--
+
+INSERT INTO `friends` (`friend_id`, `friend_name`, `area_id`, `gender`, `age`, `created`, `modified`) VALUES
+(1, '工藤　和寛', 11, 0, 29, '2016-12-08 13:20:00', '2016-12-08 05:20:00'),
+(2, '三澤　瑛子', 13, 1, 26, '2016-12-08 13:20:39', '2016-12-08 05:20:39'),
+(3, '大島　浩平', 13, 0, 26, '2016-12-08 13:21:35', '2016-12-08 05:21:35'),
+(4, '玉田　栞', 14, 1, 26, '2016-12-08 13:22:29', '2016-12-08 05:22:29'),
+(5, '齋藤　貴士', 9, 0, 27, '2016-12-08 13:23:50', '2016-12-08 05:23:50'),
+(6, '新井　直子', 11, 1, 35, '2016-12-08 13:24:28', '2016-12-08 05:24:28'),
+(7, '緒方　純子', 12, 1, 38, '2016-12-08 13:25:42', '2016-12-08 05:26:54'),
+(8, '成田　廉', 12, 0, 24, '2016-12-08 13:26:37', '2016-12-08 05:26:37'),
+(9, '中谷　僚', 27, 0, 27, '2016-12-08 13:28:51', '2016-12-08 05:28:51'),
+(10, '日下　恭介', 28, 0, 27, '2016-12-08 13:29:27', '2016-12-08 05:29:27'),
+(11, '高木　梢江', 6, 1, 35, '2016-12-08 13:30:39', '2016-12-08 05:30:39'),
+(12, '守谷　洋子', 4, 1, 29, '2016-12-08 13:32:03', '2016-12-08 05:32:03'),
+(13, '三井　拓弥', 14, 0, 28, '2016-12-08 13:34:34', '2016-12-08 05:34:34'),
+(14, '上村　まりこ', 11, 1, 27, '2016-12-08 14:21:45', '2016-12-08 06:21:45'),
+(16, 'かずゆき', 1, 0, 56, '2016-12-09 14:18:08', '2016-12-09 06:18:08'),
+(17, 'げるしー', 40, 0, 28, '2016-12-11 10:08:32', '2016-12-11 02:08:32'),
+(20, 'なおみ', 1, 1, 54, '2016-12-13 13:41:51', '2016-12-13 06:10:05');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `areas`
+--
+ALTER TABLE `areas`
+  ADD PRIMARY KEY (`area_id`);
+
+--
+-- Indexes for table `friends`
+--
+ALTER TABLE `friends`
+  ADD PRIMARY KEY (`friend_id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `areas`
+--
+ALTER TABLE `areas`
+  MODIFY `area_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=95;
+--
+-- AUTO_INCREMENT for table `friends`
+--
+ALTER TABLE `friends`
+  MODIFY `friend_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=21;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
